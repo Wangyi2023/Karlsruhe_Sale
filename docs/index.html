@@ -1,0 +1,265 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Minesweeper</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="Image/logo.png">
+    <link rel="stylesheet" href="style_ui.css" />
+    <link rel="stylesheet" href="style_board.css" />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<!-- Body -->
+<body>
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-content">
+        <div class="sidebar-header">
+            <span id="control-panel-title">Control Panel</span>
+            <div id="close-sidebar-button" class="close-sidebar-button" onclick="toggle_sidebar()">◀</div>
+        </div>
+
+        <div class="controls">
+
+            <div class="sidebar-button">
+                <div id="information-btn" class="button selected" onclick="toggle_information()">Information</div>
+            </div>
+
+            <div id="information-list" class="info-box" style="display: block">
+                <div class="info-line-empty"></div>
+
+                <div class="info-line">
+                    <span class="info-label">Status</span>
+                    <span id="status-info" class="info-value"></span>
+                </div>
+                <div class="info-line">
+                    <span class="info-label">Time</span>
+                    <span id="time-info" class="info-value"></span>
+                </div>
+                <div class="info-line">
+                    <span class="info-label">Size</span>
+                    <span id="size-info" class="info-value"></span>
+                </div>
+                <div class="info-line">
+                    <span class="info-label">Solvability</span>
+                    <span id="solvability-info" class="info-value"></span>
+                </div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="start-btn" class="button" onclick="start()">Restart</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="difficulty-btn" class="button" onclick="toggle_difficulty_dropdown()">Difficulty</div>
+            </div>
+
+            <div id="difficulty-menu" class="sidebar-menu hidden">
+                <div class="option-row">
+                    <div class="option" onclick="set_difficulty('low')">Low</div>
+                    <div class="option" onclick="set_difficulty('medium')">Medium</div>
+                </div>
+                <div class="option-row">
+                    <div class="option" onclick="set_difficulty('high')">High</div>
+                    <div class="option" onclick="set_difficulty('fullscreen')">Fullscreen</div>
+                </div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="background-btn" class="button" onclick="toggle_background_dropdown()">Background</div>
+            </div>
+
+            <div id="background-menu" class="sidebar-menu hidden">
+                <div class="option-row" >
+                    <div class="option" onclick="set_background('default.jpg')">Default</div>
+                    <div class="option" onclick="set_background('01.jpg')">01</div>
+                </div>
+                <div class="option-row" >
+                    <div class="option" onclick="set_background('02.jpg')">02</div>
+                    <div class="option" onclick="set_background('03.jpg')">03</div>
+                </div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="mark-mines-btn" class="button" onclick="mark_mines()">Mark Mines</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="hint-btn" class="button" onclick="send_hint()">Hint</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="solve-btn" class="button" onclick="solve()">Solve</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="solve-all-btn" class="button" onclick="solve_all()">Solve All</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="analyse-test-btn" class="button" onclick="calculate_and_visualize_safe_cells()">Analyse</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="continue-test-btn" class="button" onclick="continue_solving_test()">Continue</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="complete-test-btn" class="button" onclick="complete_full_solving_test()">Complete</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="screenshot-btn" class="button" onclick="screenshot_data()">Screenshot</div>
+            </div>
+
+            <div class="sidebar-button">
+                <div id="guide-btn" class="button" onclick="open_guide()">Guide</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="answer-btn" class="button" onclick="toggle_mines_visibility()">Answer</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="solving-test-btn" class="button" onclick="solving_test()">Solving Test</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="reset-test-btn" class="button" onclick="reset_test()">Reset Test</div>
+            </div>
+
+            <div class="sidebar-button hidden">
+                <div id="exit-btn" class="button" onclick="exit_test()">Exit Test</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="open-sidebar-button" class="open-sidebar-button" onclick="toggle_sidebar()">▶</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="header">
+        <div class="title-container" id="title-dark">
+            <img src="Image/minesweeper_title_dark.png" class="title-img" alt="title" id="title-img-dark" onclick="start()">
+        </div>
+        <div class="title-container" id="title-light" style="display: none;">
+            <img src="Image/minesweeper_title_light.png" class="title-img" alt="title" id="title-img-light" onclick="start()">
+        </div>
+    </div>
+
+    <div id="board-wrapper" class="board-wrapper">
+        <div id="board" class="board"></div>
+        <div id="cursor" class="cursor hidden"></div>
+        <div id="hint" class="cursor hidden"></div>
+        <div id="border" class="border"></div>
+        <div id="border-outline" class="border-outline"></div>
+    </div>
+
+    <div class="main-test-container type-a hidden" id="main-test-container-a">
+        <div class="test-introduction-a">
+            <h2>Solving Algorithm Completeness Test</h2>
+            <p>
+                Provides mutual validation between the original algorithm and an external verifier by comparing their
+                respective safe_bitmap outputs. Light yellow, yellow, and orange represent safe_bitmap identified by both
+                algorithms, only the original algorithm, and only the verifier, respectively.
+            </p>
+        </div>
+
+        <div class="test-module">
+            <h3>Controls</h3>
+            <div id="test-controls-a" class="test-ctrl">
+                <div id="ans-test-btn-a" class="test-option ctrl" onclick="toggle_mines_visibility()">Ans</div>
+                <div id="esc-test-btn-a" class="test-option ctrl" onclick="exit_test()">Esc</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main-test-container type-b hidden" id="main-test-container-b">
+        <div class="test-introduction-b">
+            <h2>Reset Algorithm Validation Test</h2>
+            <p>
+                Validates the reset algorithm's reliability through targeted test cases. Each scenario evaluates
+                the algorithm's ability to dynamically redistribute mines while preserving game state consistency and logical
+                constraints. The validation focuses on edge cases and complex configurations.
+            </p>
+        </div>
+
+        <div class="test-module">
+            <h3>Test Type 1</h3>
+            <div id="test-options-1" class="test-option-list"></div>
+        </div>
+
+        <div class="test-module">
+            <h3>Test Type 2</h3>
+            <div id="test-options-2" class="test-option-list"></div>
+        </div>
+
+        <div class="test-module">
+            <h3>Test Type 3</h3>
+            <div id="test-options-3" class="test-option-list"></div>
+        </div>
+
+        <div class="test-module">
+            <h3>Controls</h3>
+            <div id="test-controls-b" class="test-ctrl">
+                <div id="ans-test-btn-b" class="test-option ctrl" onclick="toggle_mines_visibility()">Ans</div>
+                <div id="esc-test-btn-b" class="test-option ctrl" onclick="exit_test()">Esc</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Script - Part 1 -->
+<script src="libs/html2canvas.min.js"></script>
+<script src="script_alg.js"></script>
+<script src="script_ui.js"></script>
+<!-- Modal -->
+<div id="guide-modal" class="modal hidden" onclick="close_guide(event)">
+    <div id="guide-content" class="modal-content">
+        <span class="close-button" onclick="close_guide_with_button()">×</span>
+        <div style="display: flex; flex-direction: row; gap: 30px;">
+            <div style="flex: 1; text-align: left;">
+                <h2>游戏说明</h2>
+                <p>
+                    欢迎来到扫雷 :D<br><br>
+                    请使用桌面端的 Microsoft-Edge, FireFox, Chrome 浏览器打开此页面，移动端页面暂无。<br>
+                    玩家可左键点击屏幕中心区域的方格打开无雷区域，右键点击方格标记为雷，再次左键或者右键点击可取消标记。<br>
+                    控制面板位于侧边栏中，玩家可通过侧边栏的按钮重新开始，修改难度，以及修改背景等。<br>
+                    此游戏使用算法实时在信息面板中会更新当前游戏是否有确定解。点击 Solve 按钮可以自动求解一步， 点击 Solve All 按钮
+                    可以自动求解至游戏结束。<br>
+                    在无解情况下，玩家可点击一个不一定是雷的方格，算法可以在无解并且玩家触雷时重新排布雷的位置，此时所有显现的数字不会被改变。
+                    这能确保玩家不会因为运气差而失败。<br>
+                    最后感谢您的游玩，祝您生活愉快。<br>
+                </p>
+            </div>
+
+            <div style="flex: 1; text-align: left;">
+                <h2>Game Guide</h2>
+                <p>
+                    Welcome to Minesweeper :D<br><br>
+                    Please use a desktop browser like Microsoft Edge, Firefox, or Chrome to open this page. A mobile version
+                    is not currently available.<br>
+                    Left‑click a cell in the centre grid to open it. Right‑click to mark a cell as a mine. Clicking again
+                    will remove the flag.<br>
+                    The control panel is in the sidebar, use the buttons there to restart, change difficulty, switch backgrounds,
+                    and access other features.<br>
+                    Use the buttons in the sidebar to restart the game, change difficulty, or switch backgrounds.<br>
+                    The algorithm updates the information panel in real time, showing whether the current board has a certain
+                    solution. Click "Solve" to automatically open one step.
+                    Click "Solve All" to let the algorithm play until the game ends.<br>
+                    If there is no certain solution, you may open a cell that is not necessarily a mine. If you happen to hit
+                    a mine, the algorithm will redistribute the mines without changing any visible numbers. This ensures that
+                    players will not lose due to bad luck.<br>
+                    Thank you for playing, and enjoy.<br>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Notice -->
+<div id="notice-container" class="notice-container"></div>
+</body>
+</html>

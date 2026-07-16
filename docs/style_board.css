@@ -1,0 +1,217 @@
+/* Part 5 - Board */
+.board {
+    display: grid;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+.board-wrapper {
+    position: relative;
+}
+.border {
+    display: none;
+    position: absolute;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    z-index: 3;
+    pointer-events: none;
+}
+.border-outline {
+    display: none;
+    position: absolute;
+    border: 6px solid rgba(255, 255, 255, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+/* Part 6 - Cell */
+.cell {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: 'Tahoma', 'Microsoft Sans Serif', 'Arial', sans-serif;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    position: relative;
+    transition: none;
+    z-index: 10;
+}
+.cell.revealed {
+    background-color: transparent;
+    animation: cellReveal 0.2s ease-out forwards;
+}
+.cell.mine {
+    position: relative;
+    z-index: 100;
+    background-color: rgba(255, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+.cell.mine::before {
+    content: "";
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.9);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid rgba(255, 0, 0, 0.9);
+    box-sizing: border-box;
+    box-shadow:
+            0 0 5px 1px rgba(255, 0, 0, 0.8),
+            0 0 10px 2px rgba(255, 0, 0, 0.6),
+            0 0 15px 3px rgba(255, 0, 0, 0.4);
+    animation:
+            cursorPulseRed 1s infinite ease-in-out,
+            cursorGlowRed 0.5s infinite alternate;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.cell.marked {
+    position: relative;
+}
+.cell.marked::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-image: url("Image/flag.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.cell.hidden {
+    opacity: 0;
+    transform: scale(0.2);
+    transition: none;
+    will-change: opacity, transform;
+}
+.cell.animating {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.cursor {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 1;
+
+    background: white;
+    background-size: 8px 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: 'Tahoma', 'Microsoft Sans Serif', 'Arial', sans-serif;
+
+    transition:
+            transform 0.1s cubic-bezier(0.2, 0.8, 0.5, 1),
+            opacity 0.2s cubic-bezier(0.4, 0.8, 0.9, 1);
+}
+.cursor.hidden {
+    opacity: 0;
+}
+
+.cell.ans {
+    background-color: rgba(120, 0, 0, 1);
+}
+.cell.candidate {
+    background: transparent;
+    color: rgba(0, 0, 0, 1);
+}
+
+.cell.safe-both {
+    background-color: rgba(255, 220, 120, 1);
+}
+.cell.safe-mdl {
+    background-color: rgba(240, 160, 80, 1);
+}
+.cell.safe-verifier {
+    background-color: rgba(234, 88, 12, 1);
+}
+
+
+/* Part 7 - Frames */
+@keyframes cursorPulseRed {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+@keyframes cursorGlowRed {
+    0% {
+        box-shadow:
+                0 0 5px 1px rgba(255, 0, 0, 0.8),
+                0 0 10px 2px rgba(255, 0, 0, 0.6),
+                0 0 15px 3px rgba(255, 0, 0, 0.4);
+    }
+    100% {
+        box-shadow:
+                0 0 8px 2px rgba(255, 0, 0, 0.9),
+                0 0 16px 4px rgba(255, 0, 0, 0.7),
+                0 0 24px 6px rgba(255, 0, 0, 0.5);
+    }
+}
+
+@keyframes cursorPulse {
+    0%, 100% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes cursorGlow {
+    0% {
+        box-shadow:
+                0 0 4px 1px rgba(255, 255, 255, 0.8),
+                0 0 8px 2px rgba(255, 255, 255, 0.6),
+                0 0 12px 3px rgba(255, 255, 255, 0.4);
+    }
+    100% {
+        box-shadow:
+                0 0 5px 2px rgba(255, 255, 255, 0.8),
+                0 0 10px 4px rgba(255, 255, 255, 0.6),
+                0 0 12px 6px rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes progressShrink {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
+}
+
+@keyframes cellReveal {
+    0% { transform: scale(0.95); opacity: 0.75; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
